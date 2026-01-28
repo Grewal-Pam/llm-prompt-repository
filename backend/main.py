@@ -22,6 +22,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 def startup_event():
+    print(" STARTUP EVENT RUNNING")
     init_db()
     seed_wolfram_prompts()
 

@@ -1,3 +1,5 @@
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "")
+
 export interface Prompt {
   id: number
   title: string
@@ -9,7 +11,7 @@ export interface Prompt {
 }
 
 export async function fetchPrompts(): Promise<Prompt[]> {
-  const response = await fetch("/api/prompts")
+  const response = await fetch(`${API_BASE}/prompts`)
   if (!response.ok) {
     throw new Error("Failed to fetch prompts")
   }
