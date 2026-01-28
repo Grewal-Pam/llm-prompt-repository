@@ -5,9 +5,9 @@ from seed_wolfram import seed_wolfram_prompts
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from .db import init_db
-from .models import PromptCreate, PromptRead
-from .repository import (
+from db import init_db
+from models import PromptCreate, PromptRead
+from repository import (
     create_prompt,
     get_prompts,
     get_prompt_by_id,
