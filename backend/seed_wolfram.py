@@ -1,5 +1,5 @@
-from backend.repository import create_prompt, get_prompts
-from backend.models import PromptCreate
+from repository import create_prompt, get_prompts
+from models import PromptCreate
 
 def seed_wolfram_prompts():
     existing = get_prompts()
