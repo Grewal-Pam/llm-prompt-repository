@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException, Query
 from typing import Optional, List
 from .seed_wolfram import seed_wolfram_prompts
@@ -24,14 +25,27 @@ def startup_event():
     init_db()
     seed_wolfram_prompts()
 
+ENV = os.getenv("ENV", "local")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+
+if ENV == "production":
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://127.0.0.1:5173"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
 
 @app.post("/api/prompts", response_model=PromptRead, status_code=201)
 def create_prompt_api(prompt: PromptCreate):
