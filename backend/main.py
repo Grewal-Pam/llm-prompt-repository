@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query
 from typing import Optional, List
-from backend.seed_wolfram import seed_wolfram_prompts
+from .seed_wolfram import seed_wolfram_prompts
 from fastapi.middleware.cors import CORSMiddleware
 
 
