@@ -2,8 +2,8 @@ from typing import List, Optional
 from datetime import datetime
 import sqlite3
 
-from db import get_connection
-from models import PromptCreate, PromptRead
+from backend.db import get_connection
+from backend.models import PromptCreate, PromptRead
 
 
 def create_prompt(prompt: PromptCreate) -> PromptRead:

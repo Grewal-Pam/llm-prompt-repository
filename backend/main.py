@@ -1,13 +1,13 @@
 import os
 from fastapi import FastAPI, HTTPException, Query
 from typing import Optional, List
-from seed_wolfram import seed_wolfram_prompts
+from backend.seed_wolfram import seed_wolfram_prompts
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from db import init_db
-from models import PromptCreate, PromptRead
-from repository import (
+from backend.db import init_db
+from backend.models import PromptCreate, PromptRead
+from backend.repository import (
     create_prompt,
     get_prompts,
     get_prompt_by_id,
