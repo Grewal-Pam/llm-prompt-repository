@@ -2,11 +2,11 @@ from backend.repository import create_prompt, get_prompts
 from backend.models import PromptCreate
 
 def seed_wolfram_prompts():
-    print("🌱 Seeding Wolfram prompts...")
+    print(" Seeding Wolfram prompts...")
     existing = get_prompts()
     print("Existing prompts count:", len(existing))
     if existing:
-        print("⏭️ Skipping seeding (already present)")
+        print("Skipping seeding (already present)")
         return
 
     seeds = [
