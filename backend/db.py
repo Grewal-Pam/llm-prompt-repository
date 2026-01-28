@@ -1,10 +1,13 @@
+import os
 import sqlite3
-from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "data" / "prompts.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+DB_PATH = os.path.join(DATA_DIR, "prompts.db")
+
 
 def get_connection():
+    os.makedirs(DATA_DIR, exist_ok=True)  # 🔥 THIS IS THE FIX
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
