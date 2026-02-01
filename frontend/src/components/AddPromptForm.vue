@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import { createPrompt } from "../services/api"
 
 const emit = defineEmits<{
   promptAdded: []
@@ -48,17 +49,7 @@ async function submitPrompt() {
       payload.source = source.value
     }
 
-    const response = await fetch("/api/prompts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-
-    if (!response.ok) {
-      const text = await response.text()
-      console.error("Backend error:", text)
-      throw new Error(text || "Failed to create prompt")
-    }
+    await createPrompt(payload)
 
     // Clear form
     title.value = ""
