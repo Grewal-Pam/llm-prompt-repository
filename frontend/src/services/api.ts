@@ -17,6 +17,13 @@ export interface PromptCreate {
   source?: string
 }
 
+export interface McpCapabilities {
+  protocol: string
+  capabilities: string[]
+  prompt_count: number
+  latest_prompt: string | null
+}
+
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "")
 
 export async function fetchPrompts(): Promise<Prompt[]> {
@@ -36,6 +43,14 @@ export async function createPrompt(prompt: PromptCreate): Promise<Prompt> {
   if (!response.ok) {
     const text = await response.text()
     throw new Error(text || "Failed to create prompt")
+  }
+  return response.json()
+}
+
+export async function fetchMcpCapabilities(): Promise<McpCapabilities> {
+  const response = await fetch(`${API_BASE}/mcp/capabilities`)
+  if (!response.ok) {
+    throw new Error("Failed to fetch MCP capabilities")
   }
   return response.json()
 }

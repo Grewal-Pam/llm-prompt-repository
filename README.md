@@ -12,6 +12,17 @@ Web app for sharing and browsing LLM prompts for scientific research. Users can 
 - Purpose-based filtering
 - Optional tags and source links
 - Seeded example prompts
+- MCP capabilities demo for learning and integration checks
+
+## Screenshots
+
+Home view with seeded prompts:
+
+![LLM Prompt Repository home screen](docs/screenshots/home.png)
+
+MCP capabilities panel after clicking the button:
+
+![LLM Prompt Repository MCP capabilities view](docs/screenshots/mcp-capabilities.png)
 
 ## Architecture
 - **Frontend:** Vue 3 + TypeScript + Vite

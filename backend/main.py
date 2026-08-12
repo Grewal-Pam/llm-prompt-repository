@@ -70,3 +70,14 @@ def get_prompt_api(prompt_id: int):
     if not prompt:
         raise HTTPException(status_code=404, detail="Prompt not found")
     return prompt
+
+@app.get("/mcp/capabilities")
+def mcp_capabilities_api():
+    prompts = get_prompts()
+    latest_prompt = prompts[0] if prompts else None
+    return {
+        "protocol": "mcp-lite",
+        "capabilities": ["prompt_catalog", "prompt_creation"],
+        "prompt_count": len(prompts),
+        "latest_prompt": latest_prompt.title if latest_prompt else None,
+    }

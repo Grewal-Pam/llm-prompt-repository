@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { fetchPrompts, type Prompt } from './services/api'
+import { fetchMcpCapabilities, fetchPrompts, type McpCapabilities, type Prompt } from './services/api'
 import AddPromptForm from "./components/AddPromptForm.vue"
 
 const prompts = ref<Prompt[]>([])
@@ -8,6 +8,9 @@ const loading = ref(true)
 const error = ref<string | null>(null)
 const searchQuery = ref('')
 const selectedPurpose = ref('')
+const mcpLoading = ref(false)
+const mcpError = ref<string | null>(null)
+const mcpCapabilities = ref<McpCapabilities | null>(null)
 
 const purposes = computed(() => {
   const uniquePurposes = new Set(prompts.value.map(p => p.purpose))
@@ -50,6 +53,18 @@ function handlePromptAdded() {
   loadPrompts()
 }
 
+async function loadMcpCapabilities() {
+  mcpLoading.value = true
+  mcpError.value = null
+  try {
+    mcpCapabilities.value = await fetchMcpCapabilities()
+  } catch (caughtError) {
+    mcpError.value = caughtError instanceof Error ? caughtError.message : 'Failed to load MCP capabilities.'
+  } finally {
+    mcpLoading.value = false
+  }
+}
+
 onMounted(() => {
   loadPrompts()
 })
@@ -61,8 +76,20 @@ onMounted(() => {
   <div class="app">
     <header class="header">
       <div class="container">
-        <h1>🧪 LLM Prompt Repository</h1>
+        <h1> LLM Prompt Repository</h1>
         <p class="subtitle">Anonymous repository for sharing scientific LLM prompts</p>
+        <div class="mcp-panel">
+          <button type="button" class="mcp-button" :disabled="mcpLoading" @click="loadMcpCapabilities">
+            {{ mcpLoading ? 'Checking MCP...' : 'Check MCP capabilities' }}
+          </button>
+          <div v-if="mcpError" class="mcp-error">{{ mcpError }}</div>
+          <div v-else-if="mcpCapabilities" class="mcp-summary">
+            <strong>MCP:</strong> {{ mcpCapabilities.protocol }}
+            <span>Tools: {{ mcpCapabilities.capabilities.join(', ') }}</span>
+            <span>Prompts: {{ mcpCapabilities.prompt_count }}</span>
+            <span v-if="mcpCapabilities.latest_prompt">Latest: {{ mcpCapabilities.latest_prompt }}</span>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -159,6 +186,44 @@ onMounted(() => {
   margin: 0;
   color: #718096;
   font-size: 1.1rem;
+}
+
+.mcp-panel {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mcp-button {
+  align-self: flex-start;
+  background: #1f2937;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+}
+
+.mcp-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.mcp-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #e8f3ff;
+  color: #1f2937;
+}
+
+.mcp-error {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 .container {

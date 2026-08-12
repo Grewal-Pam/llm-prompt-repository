@@ -59,6 +59,8 @@ def get_prompts(q: Optional[str] = None, purpose: Optional[str] = None) -> List[
         query += " AND purpose = ?"
         params.append(purpose)
 
+    query += " ORDER BY datetime(created_at) DESC, id DESC"
+
     rows = cursor.execute(query, params).fetchall()
     conn.close()
 
